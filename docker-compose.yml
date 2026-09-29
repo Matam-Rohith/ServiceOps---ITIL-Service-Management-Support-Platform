@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL 16 Relational Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: serviceops-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: serviceops_db
+      POSTGRES_USER: serviceops_user
+      POSTGRES_PASSWORD: serviceops_secure_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U serviceops_user -d serviceops_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - serviceops-network
+
+  # 2. Spring Boot 3 Java 21 Backend API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: serviceops-backend
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/serviceops_db
+      SPRING_DATASOURCE_USERNAME: serviceops_user
+      SPRING_DATASOURCE_PASSWORD: serviceops_secure_pass
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - serviceops-network
+
+  # 3. React Vite TypeScript Frontend SPA
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: serviceops-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - serviceops-network
+
+networks:
+  serviceops-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
