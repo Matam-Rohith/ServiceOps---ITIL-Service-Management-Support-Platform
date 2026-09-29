@@ -2,5 +2,7 @@
   "name": "ServiceOps - ITIL Service Management & Support Platform",
   "description": "Production-grade ITIL IT Service Management platform featuring Incident, SLA Tracking, Service Catalog, Problem, Change, Asset CMDB, and Knowledge Base management.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

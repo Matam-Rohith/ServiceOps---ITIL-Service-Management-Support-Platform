@@ -85,13 +85,16 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                     className="w-9 h-9 rounded-full object-cover border border-white shadow-2xs mt-0.5"
                   />
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-1">
                       <span className="font-bold text-xs text-slate-900 group-hover:text-indigo-600">
                         {u.name}
                       </span>
+                      <RoleBadge role={u.role} className="text-[9px] py-0" />
                     </div>
-                    <RoleBadge role={u.role} className="text-[9px] py-0 mt-0.5" />
-                    <span className="text-[10px] text-slate-400 block truncate mt-0.5 font-mono">
+                    <span className="text-[10px] text-slate-500 block truncate mt-0.5">
+                      {u.team || u.department}
+                    </span>
+                    <span className="text-[10px] text-slate-400 block truncate font-mono">
                       {u.email}
                     </span>
                   </div>

@@ -153,9 +153,8 @@ export const ServiceOpsProvider: React.FC<{ children: ReactNode }> = ({ children
   const [currentUser, setCurrentUser] = useState<User>(() =>
     getStoredOrDefault<User>(KEY_USER, INITIAL_USERS[1]) // Default to Service Agent Bunny
   );
-  const [token, setToken] = useState<string | null>(() =>
-    getStoredOrDefault<string | null>(KEY_TOKEN, 'demo-jwt-token-agent')
-  );
+  // Start unauthenticated so the application always presents the login screen first
+  const [token, setToken] = useState<string | null>(null);
   const [users] = useState<User[]>(INITIAL_USERS);
   const [slaPolicies, setSlaPolicies] = useState<SlaPolicy[]>(() =>
     getStoredOrDefault<SlaPolicy[]>(KEY_POLICIES, INITIAL_SLA_POLICIES)
@@ -189,7 +188,11 @@ export const ServiceOpsProvider: React.FC<{ children: ReactNode }> = ({ children
   // Sync to localStorage
   useEffect(() => {
     localStorage.setItem(KEY_USER, JSON.stringify(currentUser));
-    if (token) localStorage.setItem(KEY_TOKEN, JSON.stringify(token));
+    if (token) {
+      localStorage.setItem(KEY_TOKEN, JSON.stringify(token));
+    } else {
+      localStorage.removeItem(KEY_TOKEN);
+    }
   }, [currentUser, token]);
 
   useEffect(() => {
