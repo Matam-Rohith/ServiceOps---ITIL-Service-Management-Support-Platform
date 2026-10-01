@@ -34,7 +34,7 @@ import {
 } from '../data/initialData';
 
 // Storage keys
-const STORAGE_PREFIX = 'serviceops_';
+const STORAGE_PREFIX = 'serviceops_v2_';
 const KEY_USER = `${STORAGE_PREFIX}user`;
 const KEY_TOKEN = `${STORAGE_PREFIX}token`;
 const KEY_INCIDENTS = `${STORAGE_PREFIX}incidents`;
