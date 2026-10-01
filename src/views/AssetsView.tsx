@@ -38,6 +38,16 @@ export const AssetsView: React.FC<AssetsViewProps> = ({
     }
     return null;
   });
+
+  React.useEffect(() => {
+    if (selectedAssetId) {
+      const match = assets.find(a => a.id === selectedAssetId);
+      if (match) {
+        setInspectingAsset(match);
+        setSearchQuery(match.assetTag);
+      }
+    }
+  }, [selectedAssetId, assets]);
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   // New Asset Form
@@ -264,7 +274,42 @@ export const AssetsView: React.FC<AssetsViewProps> = ({
             <div className="grid grid-cols-2 gap-3 border border-slate-200 rounded-lg divide-y divide-slate-100">
               <div className="p-3">
                 <span className="text-slate-400 block text-[11px]">Primary User / Owner</span>
-                <span className="font-bold text-slate-800">{inspectingAsset.ownerName || 'Unassigned Depot'}</span>
+                {currentUser.role !== 'EMPLOYEE' ? (
+                  <input
+                    type="text"
+                    value={inspectingAsset.ownerName || ''}
+                    placeholder="Enter owner name..."
+                    onChange={(e) => {
+                      const newOwner = e.target.value;
+                      updateAsset(inspectingAsset.id, { ownerName: newOwner || undefined });
+                      setInspectingAsset(prev => prev ? { ...prev, ownerName: newOwner || undefined } : null);
+                    }}
+                    className="mt-1 w-full text-xs px-2 py-1 rounded border border-slate-200"
+                  />
+                ) : (
+                  <span className="font-bold text-slate-800">{inspectingAsset.ownerName || 'Unassigned Depot'}</span>
+                )}
+              </div>
+              <div className="p-3">
+                <span className="text-slate-400 block text-[11px]">Lifecycle Status</span>
+                {currentUser.role !== 'EMPLOYEE' ? (
+                  <select
+                    value={inspectingAsset.status}
+                    onChange={(e) => {
+                      const newStatus = e.target.value as AssetStatus;
+                      updateAsset(inspectingAsset.id, { status: newStatus });
+                      setInspectingAsset(prev => prev ? { ...prev, status: newStatus } : null);
+                    }}
+                    className="mt-1 w-full text-xs px-2 py-1 rounded border border-slate-200 bg-white font-medium"
+                  >
+                    <option value="IN_USE">In Use</option>
+                    <option value="IN_STORAGE">In Storage</option>
+                    <option value="IN_REPAIR">In Repair</option>
+                    <option value="RETIRED">Retired</option>
+                  </select>
+                ) : (
+                  <span className="font-bold text-slate-800">{inspectingAsset.status}</span>
+                )}
               </div>
               <div className="p-3">
                 <span className="text-slate-400 block text-[11px]">Department</span>
@@ -281,10 +326,6 @@ export const AssetsView: React.FC<AssetsViewProps> = ({
               <div className="p-3">
                 <span className="text-slate-400 block text-[11px]">Serial Number</span>
                 <span className="font-mono font-bold text-slate-800">{inspectingAsset.serialNumber}</span>
-              </div>
-              <div className="p-3">
-                <span className="text-slate-400 block text-[11px]">Warranty Expiry</span>
-                <span className="font-mono font-bold text-slate-800">{inspectingAsset.warrantyExpiry}</span>
               </div>
             </div>
 

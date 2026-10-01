@@ -8,18 +8,18 @@ interface BadgeProps {
 
 export const PriorityBadge: React.FC<{ priority: PriorityLevel; className?: string }> = ({ priority, className = '' }) => {
   const configs: Record<PriorityLevel, { bg: string; dot: string; label: string }> = {
-    P1: { bg: 'bg-rose-50 text-rose-700 border-rose-200', dot: 'bg-rose-500 animate-pulse', label: 'P1 - Critical' },
-    P2: { bg: 'bg-amber-50 text-amber-800 border-amber-200', dot: 'bg-amber-500', label: 'P2 - High' },
-    P3: { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500', label: 'P3 - Moderate' },
-    P4: { bg: 'bg-slate-100 text-slate-700 border-slate-200', dot: 'bg-slate-400', label: 'P4 - Low' }
+    P1: { bg: 'bg-rose-50 text-rose-700 border-rose-200', dot: 'bg-rose-600', label: 'P1 · Critical' },
+    P2: { bg: 'bg-amber-50 text-amber-800 border-amber-200', dot: 'bg-amber-500', label: 'P2 · High' },
+    P3: { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500', label: 'P3 · Moderate' },
+    P4: { bg: 'bg-slate-100 text-slate-700 border-slate-200', dot: 'bg-slate-400', label: 'P4 · Low' }
   };
 
   const c = configs[priority] || configs.P4;
 
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${c.bg} ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium border ${c.bg} ${className}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
-      {c.label}
+      <span>{c.label}</span>
     </span>
   );
 };
@@ -36,6 +36,7 @@ export const StatusBadge: React.FC<{ status: IncidentStatus | string; className?
     // Service Request / Change statuses
     PENDING_APPROVAL: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
     APPROVED: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
+    REJECTED: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200' },
     FULFILLED: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
     SCHEDULED: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
     COMPLETED: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
@@ -47,7 +48,7 @@ export const StatusBadge: React.FC<{ status: IncidentStatus | string; className?
   const c = configs[status] || { bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' };
 
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wider border ${c.bg} ${c.text} ${c.border} ${className}`}>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${c.bg} ${c.text} ${c.border} ${className}`}>
       {status.replace(/_/g, ' ')}
     </span>
   );
@@ -60,51 +61,52 @@ export const SlaBadge: React.FC<{ status: SlaStatus; breached?: boolean; classNa
 }) => {
   if (breached || status === 'BREACHED') {
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300 ${className}`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping" />
-        BREACHED
+      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 ${className}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-rose-600" />
+        Breached
       </span>
     );
   }
 
   if (status === 'AT_RISK') {
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 ${className}`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-        AT RISK
+      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 ${className}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+        At Risk
       </span>
     );
   }
 
   if (status === 'PAUSED') {
     return (
-      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200 ${className}`}>
-        PAUSED
+      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200 ${className}`}>
+        Paused
       </span>
     );
   }
 
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 ${className}`}>
       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-      ON TRACK
+      On Track
     </span>
   );
 };
 
 export const RoleBadge: React.FC<{ role: UserRole; className?: string }> = ({ role, className = '' }) => {
   const configs: Record<UserRole, { bg: string; text: string; border: string; label: string }> = {
-    EMPLOYEE: { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-300', label: 'Employee' },
-    SERVICE_AGENT: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300', label: 'Service Agent (L2)' },
-    SERVICE_MANAGER: { bg: 'bg-purple-100', text: 'text-purple-800', border: 'border-purple-300', label: 'Service Manager' },
-    ADMIN: { bg: 'bg-rose-100', text: 'text-rose-900', border: 'border-rose-300', label: 'System Admin' }
+    EMPLOYEE: { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-200', label: 'Employee' },
+    SERVICE_AGENT: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', label: 'Service Desk L2' },
+    SERVICE_MANAGER: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', label: 'Service Manager' },
+    ADMIN: { bg: 'bg-slate-100', text: 'text-slate-800', border: 'border-slate-300', label: 'System Admin' }
   };
 
-  const c = configs[role];
+  const c = configs[role] || configs.EMPLOYEE;
 
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${c.bg} ${c.text} ${c.border} ${className}`}>
+    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium border ${c.bg} ${c.text} ${c.border} ${className}`}>
       {c.label}
     </span>
   );
 };
+

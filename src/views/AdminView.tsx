@@ -12,7 +12,8 @@ import {
   Edit2,
   CheckCircle,
   Database,
-  Server
+  Server,
+  AlertTriangle
 } from 'lucide-react';
 
 export const AdminView: React.FC = () => {
@@ -29,6 +30,7 @@ export const AdminView: React.FC = () => {
   const [editingPolicy, setEditingPolicy] = useState<SlaPolicy | null>(null);
   const [responseMins, setResponseMins] = useState(15);
   const [resolutionMins, setResolutionMins] = useState(240);
+  const [resetModalOpen, setResetModalOpen] = useState(false);
 
   const handleEditPolicy = (p: SlaPolicy) => {
     setEditingPolicy(p);
@@ -201,31 +203,64 @@ export const AdminView: React.FC = () => {
             <span className="text-lg font-bold text-slate-800">{assets.length}</span>
           </div>
           <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-            <span className="text-slate-400 block text-[11px]">SLA Authoritative Engine</span>
-            <span className="text-emerald-600 font-bold flex items-center gap-1 mt-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Ticking (10s intervals)
+            <span className="text-slate-400 block text-[11px]">SLA Calculation Engine</span>
+            <span className="text-emerald-700 font-semibold flex items-center gap-1.5 mt-1 text-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+              Active (10s intervals)
             </span>
           </div>
         </div>
 
         <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
           <span className="text-xs text-slate-500">
-            Reset all state to initial certified demo data
+            Restore system state to initial verified dataset
           </span>
           <button
-            onClick={() => {
-              if (confirm('Reset state to initial realistic demo dataset?')) {
-                resetToDemoData();
-              }
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-200 text-rose-700 bg-rose-50 hover:bg-rose-100 text-xs font-bold transition-colors"
+            onClick={() => setResetModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-xs font-semibold transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>Reset Demo Database</span>
+            <span>Reset Demo Data</span>
           </button>
         </div>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      <Modal
+        isOpen={resetModalOpen}
+        onClose={() => setResetModalOpen(false)}
+        title="Reset Demo Data"
+        subtitle="Restore system state to initial seed records"
+        maxWidth="md"
+      >
+        <div className="space-y-4">
+          <div className="flex items-start gap-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <p>
+              This action will reset all active incidents, service requests, change requests, problems, and configuration records back to their baseline seed values.
+            </p>
+          </div>
+          <div className="flex items-center justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => setResetModalOpen(false)}
+              className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-xs font-semibold transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                resetToDemoData();
+                setResetModalOpen(false);
+              }}
+              className="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-2xs transition-colors"
+            >
+              Confirm Reset
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Edit Policy Modal */}
       {editingPolicy && (

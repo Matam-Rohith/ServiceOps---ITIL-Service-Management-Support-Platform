@@ -12,8 +12,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ShoppingBag,
-  ArrowRight,
-  Sparkles
+  ArrowRight
 } from 'lucide-react';
 
 interface ServiceCatalogViewProps {
@@ -34,6 +33,13 @@ export const ServiceCatalogView: React.FC<ServiceCatalogViewProps> = ({
     }
     return null;
   });
+
+  React.useEffect(() => {
+    if (selectedItemId) {
+      const match = catalogItems.find(c => c.id === selectedItemId);
+      if (match) setSelectedItem(match);
+    }
+  }, [selectedItemId, catalogItems]);
 
   const [justification, setJustification] = useState('');
   const [formData, setFormData] = useState<Record<string, string>>({});

@@ -92,7 +92,10 @@ function MainApp() {
             {activeTab === 'dashboard' && (
               <DashboardView
                 onNavigate={handleNavigateWithParams}
-                onOpenCreateIncident={() => setGlobalCreateIncidentOpen(true)}
+                onOpenCreateIncident={() => {
+                  setActiveTab('incidents');
+                  setGlobalCreateIncidentOpen(true);
+                }}
               />
             )}
 
@@ -163,19 +166,6 @@ function MainApp() {
           </div>
         </main>
       </div>
-
-      {/* Global Create Incident Modal Trigger if on another tab */}
-      {globalCreateIncidentOpen && activeTab !== 'incidents' && (
-        <IncidentsView
-          onSelectIncident={(inc) => {
-            setGlobalCreateIncidentOpen(false);
-            setSelectedIncident(inc);
-            setActiveTab('incidents');
-          }}
-          openCreateModal={true}
-          onCloseCreateModal={() => setGlobalCreateIncidentOpen(false)}
-        />
-      )}
     </div>
   );
 }

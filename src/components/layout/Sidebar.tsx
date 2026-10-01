@@ -133,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
     },
     {
       id: 'architecture',
-      label: 'Architecture & API',
+      label: 'Architecture & Specs',
       icon: Code2,
       visible: true
     }
@@ -177,7 +177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onSelectTab }) => {
                 </div>
                 {item.badge !== undefined && item.badge > 0 && (
                   <span
-                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                    className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
                       isActive ? 'bg-white/20 text-white' : item.badgeColor || 'bg-slate-800 text-slate-300'
                     }`}
                   >

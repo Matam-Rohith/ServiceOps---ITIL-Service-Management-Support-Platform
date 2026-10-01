@@ -536,6 +536,50 @@ export const IncidentDetailView: React.FC<IncidentDetailViewProps> = ({
             </div>
           </div>
 
+          {/* Priority & Triage Assessment */}
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                ITIL Priority Matrix
+              </h2>
+              <PriorityBadge priority={incident.priority} />
+            </div>
+
+            {isStaff ? (
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-0.5">Impact</label>
+                  <select
+                    value={incident.impact}
+                    onChange={(e) => updateIncidentPriority(incident.id, e.target.value as ImpactLevel, incident.urgency)}
+                    className="w-full text-xs px-2 py-1.5 rounded-lg border border-slate-200 bg-white font-medium text-slate-800"
+                  >
+                    <option value="HIGH">High (Enterprise)</option>
+                    <option value="MEDIUM">Medium (Dept)</option>
+                    <option value="LOW">Low (Single)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] text-slate-400 block mb-0.5">Urgency</label>
+                  <select
+                    value={incident.urgency}
+                    onChange={(e) => updateIncidentPriority(incident.id, incident.impact, e.target.value as UrgencyLevel)}
+                    className="w-full text-xs px-2 py-1.5 rounded-lg border border-slate-200 bg-white font-medium text-slate-800"
+                  >
+                    <option value="HIGH">High (Work Blocked)</option>
+                    <option value="MEDIUM">Medium (Degraded)</option>
+                    <option value="LOW">Low (Minor)</option>
+                  </select>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between text-xs text-slate-600">
+                <span>Impact: <strong>{incident.impact}</strong></span>
+                <span>Urgency: <strong>{incident.urgency}</strong></span>
+              </div>
+            )}
+          </div>
+
           {/* Affected CMDB Asset Card */}
           {affectedAsset && (
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-2">

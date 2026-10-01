@@ -42,7 +42,7 @@ export const ApprovalsView: React.FC = () => {
           The Approvals Queue is restricted to <strong>Service Managers</strong> and <strong>Administrators</strong> under ITIL governance rules.
         </p>
         <span className="text-[11px] text-amber-700 block">
-          Use the role switcher in the top right to switch to <strong>Sai (Manager)</strong> to review approvals.
+          Please log in or switch to an authorized Service Manager or Administrator profile to review pending approvals.
         </span>
       </div>
     );

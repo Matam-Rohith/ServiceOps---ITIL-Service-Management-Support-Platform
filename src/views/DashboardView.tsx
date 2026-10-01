@@ -60,39 +60,39 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     return (
       <div className="space-y-6">
         {/* Welcome Banner */}
-        <div className="bg-gradient-to-r from-indigo-700 via-indigo-800 to-slate-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 text-white relative">
           <div className="max-w-2xl relative z-10">
-            <span className="text-xs uppercase font-bold tracking-wider text-indigo-300 block mb-1">
+            <span className="text-[11px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
               IT Employee Self-Service Portal
             </span>
             <h1 className="text-2xl font-black tracking-tight">
               Welcome back, {currentUser.name}
             </h1>
-            <p className="text-sm text-indigo-100 mt-1 leading-relaxed">
-              Report equipment issues, submit hardware &amp; software requests, or browse self-help guides.
+            <p className="text-sm text-slate-300 mt-1 leading-relaxed">
+              Report equipment issues, submit hardware &amp; software requests, or browse self-help runbooks.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 mt-4">
               <button
                 onClick={onOpenCreateIncident}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-indigo-900 font-bold text-xs hover:bg-indigo-50 shadow-sm transition-all"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-indigo-600 text-white font-semibold text-xs hover:bg-indigo-500 shadow-2xs transition-colors"
               >
-                <PlusCircle className="w-4 h-4 text-indigo-700" />
+                <PlusCircle className="w-4 h-4" />
                 <span>Report an Incident</span>
               </button>
               <button
                 onClick={() => onNavigate('catalog')}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600/80 border border-indigo-400/40 text-white font-semibold text-xs hover:bg-indigo-600 transition-all"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-xs hover:bg-slate-700 hover:text-white transition-colors"
               >
-                <ShoppingBag className="w-4 h-4 text-indigo-200" />
+                <ShoppingBag className="w-4 h-4 text-slate-400" />
                 <span>Request IT Services</span>
               </button>
               <button
                 onClick={() => onNavigate('knowledge')}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600/80 border border-indigo-400/40 text-white font-semibold text-xs hover:bg-indigo-600 transition-all"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 font-semibold text-xs hover:bg-slate-700 hover:text-white transition-colors"
               >
-                <BookOpen className="w-4 h-4 text-indigo-200" />
-                <span>Search Knowledge Base</span>
+                <BookOpen className="w-4 h-4 text-slate-400" />
+                <span>Knowledge Base</span>
               </button>
             </div>
           </div>
@@ -278,9 +278,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="flex items-baseline justify-between mt-2">
             <span className="text-2xl font-black text-rose-600">{metrics.criticalIncidents}</span>
             {metrics.criticalIncidents > 0 ? (
-              <Flame className="w-4 h-4 text-rose-500 animate-bounce" />
+              <span className="text-xs text-rose-600 font-semibold px-1.5 py-0.5 rounded bg-rose-100 border border-rose-200">
+                Action Req.
+              </span>
             ) : (
-              <span className="text-xs text-emerald-600 font-bold">Clear</span>
+              <span className="text-xs text-emerald-600 font-medium">None</span>
             )}
           </div>
         </div>

@@ -34,6 +34,16 @@ export const ProblemsView: React.FC<ProblemsViewProps> = ({
     return null;
   });
 
+  React.useEffect(() => {
+    if (selectedProblemId) {
+      const match = problems.find(p => p.id === selectedProblemId);
+      if (match) {
+        setSelectedProblem(match);
+        setSearchQuery(match.problemNumber);
+      }
+    }
+  }, [selectedProblemId, problems]);
+
   // Modal States
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);

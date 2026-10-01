@@ -19,8 +19,7 @@ import {
   Laptop,
   CheckCircle,
   Clock,
-  Layers,
-  Sparkles
+  Layers
 } from 'lucide-react';
 
 interface IncidentsViewProps {
@@ -43,12 +42,13 @@ export const IncidentsView: React.FC<IncidentsViewProps> = ({
     createIncident
   } = useServiceOps();
 
-  // Filters & Search
+  // Filters & Search & Sort
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL');
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [assignmentFilter, setAssignmentFilter] = useState<string>('ALL');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'priority' | 'sla'>('newest');
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(openCreateModal);
@@ -111,6 +111,25 @@ export const IncidentsView: React.FC<IncidentsViewProps> = ({
       return true;
     });
   }, [incidents, currentUser, statusFilter, priorityFilter, categoryFilter, assignmentFilter, searchQuery]);
+
+  const sortedIncidents = useMemo(() => {
+    return [...filteredIncidents].sort((a, b) => {
+      if (sortBy === 'newest') {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      if (sortBy === 'oldest') {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      }
+      if (sortBy === 'priority') {
+        const priorityOrder: Record<PriorityLevel, number> = { P1: 1, P2: 2, P3: 3, P4: 4 };
+        return (priorityOrder[a.priority] || 4) - (priorityOrder[b.priority] || 4);
+      }
+      if (sortBy === 'sla') {
+        return new Date(a.sla.resolutionDeadline).getTime() - new Date(b.sla.resolutionDeadline).getTime();
+      }
+      return 0;
+    });
+  }, [filteredIncidents, sortBy]);
 
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,6 +247,21 @@ export const IncidentsView: React.FC<IncidentsViewProps> = ({
                 <option value="UNASSIGNED">Unassigned</option>
               </select>
             )}
+
+            {/* Sort Order */}
+            <div className="flex items-center gap-1.5 pl-1">
+              <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="text-xs px-2.5 py-2 rounded-lg border border-slate-200 bg-white font-medium text-slate-700 focus:outline-hidden"
+              >
+                <option value="newest">Sort: Newest First</option>
+                <option value="priority">Sort: Highest Priority</option>
+                <option value="sla">Sort: SLA Urgency</option>
+                <option value="oldest">Sort: Oldest First</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -249,7 +283,7 @@ export const IncidentsView: React.FC<IncidentsViewProps> = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
-              {filteredIncidents.length === 0 ? (
+              {sortedIncidents.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-400">
                     <p className="text-sm font-semibold text-slate-600">No incident records found</p>
@@ -257,7 +291,7 @@ export const IncidentsView: React.FC<IncidentsViewProps> = ({
                   </td>
                 </tr>
               ) : (
-                filteredIncidents.map(inc => (
+                sortedIncidents.map(inc => (
                   <tr
                     key={inc.id}
                     onClick={() => onSelectIncident(inc)}
@@ -377,7 +411,7 @@ export const IncidentsView: React.FC<IncidentsViewProps> = ({
           <div className="bg-indigo-50/60 border border-indigo-100 rounded-xl p-3.5 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                <Layers className="w-3.5 h-3.5 text-indigo-600" />
                 ITIL Priority Matrix &amp; SLA Target Calculation
               </span>
               <div className="flex items-center gap-2">

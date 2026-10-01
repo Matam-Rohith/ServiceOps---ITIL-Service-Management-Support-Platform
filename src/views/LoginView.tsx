@@ -60,29 +60,29 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl">
         <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10 border border-slate-200 space-y-6">
-          {/* Quick Demo Sign-In Personas */}
+          {/* Quick Sign-In Personas */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                1-Click Role Login (Demo Personas)
+                Select Persona to Sign In
               </span>
-              <span className="text-[10px] text-indigo-600 font-semibold bg-indigo-50 px-2 py-0.5 rounded">
-                Password: Demo123!
+              <span className="text-[11px] text-slate-400">
+                Standard Demo Accounts
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {users.slice(0, 4).map(u => (
                 <button
                   key={u.id}
                   type="button"
                   onClick={() => handleQuickLogin(u)}
-                  className="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/40 text-left transition-all group"
+                  className="flex items-start gap-2.5 p-3 rounded-lg border border-slate-200 hover:border-indigo-500 hover:bg-slate-50 text-left transition-all group"
                 >
                   <img
                     src={u.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}
                     alt={u.name}
-                    className="w-9 h-9 rounded-full object-cover border border-white shadow-2xs mt-0.5"
+                    className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0 mt-0.5"
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-1">
@@ -91,7 +91,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                       </span>
                       <RoleBadge role={u.role} className="text-[9px] py-0" />
                     </div>
-                    <span className="text-[10px] text-slate-500 block truncate mt-0.5">
+                    <span className="text-[11px] text-slate-500 block truncate mt-0.5">
                       {u.team || u.department}
                     </span>
                     <span className="text-[10px] text-slate-400 block truncate font-mono">
@@ -108,7 +108,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
               <div className="w-full border-t border-slate-200" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-slate-400 font-semibold">Or sign in manually</span>
+              <span className="bg-white px-2 text-slate-400 font-medium">Or enter credentials</span>
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
             )}
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Corporate Email Address
               </label>
               <div className="relative">
@@ -132,13 +132,13 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -148,16 +148,16 @@ export const LoginView: React.FC<LoginViewProps> = ({ onSuccess }) => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors shadow-2xs"
             >
-              <span>Authenticate with JWT</span>
+              <span>Sign In</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>

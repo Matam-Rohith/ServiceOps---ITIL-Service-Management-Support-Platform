@@ -306,7 +306,33 @@ export const ServiceRequestsView: React.FC<ServiceRequestsViewProps> = ({ onOpen
               </div>
             </div>
 
-            <div className="flex justify-end pt-2 border-t border-slate-200">
+            <div className="flex items-center justify-between pt-2 border-t border-slate-200">
+              <div className="flex items-center gap-2">
+                {isStaff && selectedReq.status === 'APPROVED' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateRequestStatus(selectedReq.id, 'IN_PROGRESS');
+                      setSelectedReq(null);
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs transition-colors"
+                  >
+                    Start Fulfillment
+                  </button>
+                )}
+                {isStaff && selectedReq.status === 'IN_PROGRESS' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      updateRequestStatus(selectedReq.id, 'FULFILLED');
+                      setSelectedReq(null);
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs transition-colors"
+                  >
+                    Mark as Fulfilled
+                  </button>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={() => setSelectedReq(null)}

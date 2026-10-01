@@ -10,7 +10,6 @@ import {
   PlusCircle,
   FileText,
   Clock,
-  Sparkles,
   ArrowRight
 } from 'lucide-react';
 

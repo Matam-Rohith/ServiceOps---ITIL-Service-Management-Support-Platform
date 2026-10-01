@@ -25,11 +25,11 @@ export const ArchitectureView: React.FC = () => {
             <Code2 className="w-5 h-5" />
           </div>
           <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
-            System Architecture, Data Models &amp; Interview Defense
+            System Architecture &amp; Technical Specifications
           </h1>
         </div>
         <p className="text-xs text-slate-500 mt-1">
-          Detailed engineering documentation covering Spring Boot 3 backend design, PostgreSQL schema, ITIL lifecycles, and technical interview questions
+          Engineering documentation covering backend service boundaries, PostgreSQL data schema, ITIL workflows, and Architecture Decision Records (ADRs)
         </p>
       </div>
 
@@ -37,7 +37,7 @@ export const ArchitectureView: React.FC = () => {
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => setActiveSection('architecture')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSection === 'architecture'
               ? 'bg-indigo-600 text-white shadow-xs'
               : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -49,7 +49,7 @@ export const ArchitectureView: React.FC = () => {
 
         <button
           onClick={() => setActiveSection('database')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSection === 'database'
               ? 'bg-indigo-600 text-white shadow-xs'
               : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -61,7 +61,7 @@ export const ArchitectureView: React.FC = () => {
 
         <button
           onClick={() => setActiveSection('api')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSection === 'api'
               ? 'bg-indigo-600 text-white shadow-xs'
               : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
@@ -73,14 +73,14 @@ export const ArchitectureView: React.FC = () => {
 
         <button
           onClick={() => setActiveSection('interview')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSection === 'interview'
               ? 'bg-indigo-600 text-white shadow-xs'
               : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
           }`}
         >
           <BookOpen className="w-4 h-4" />
-          <span>Technical Interview Defense Guide</span>
+          <span>Architecture Decision Records (ADRs)</span>
         </button>
       </div>
 
@@ -358,58 +358,84 @@ export const ArchitectureView: React.FC = () => {
         </div>
       )}
 
-      {/* Section 4: Technical Interview Defense Guide */}
+      {/* Section 4: Architecture Decision Records (ADRs) */}
       {activeSection === 'interview' && (
         <div className="space-y-4">
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-2xs space-y-4">
-            <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-indigo-600" />
-              Technical Interview Defense Guide (Core Engineering Decisions)
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-indigo-600" />
+                Architecture Decision Records (ADRs)
+              </h2>
+              <span className="text-xs text-slate-400 font-mono">Status: Accepted &bull; ITIL v4 Compliant</span>
+            </div>
 
             <div className="space-y-4 text-xs">
               <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h3 className="font-bold text-slate-900 text-sm">
-                  1. Why was PostgreSQL chosen instead of a NoSQL document database?
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-slate-900 text-sm">
+                    ADR-001: Relational ACID Persistence for Lifecycles &amp; Audit Logs
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    APPROVED
+                  </span>
+                </div>
                 <p className="text-slate-700 leading-relaxed">
-                  ITSM platforms are inherently relational: an incident links to a requester (user), an assigned agent, a configuration item (asset in CMDB), an SLA policy, comments, history entries, and potentially a problem record. ACID guarantees are critical to ensure ticket numbers remain strictly unique under concurrency, and that status transitions, SLA milestone timestamps, and audit events commit atomically within a single database transaction boundary.
+                  <strong>Context:</strong> ITSM platforms are inherently relational: an incident connects to a requester, an assigned agent, a configuration item (asset in CMDB), an SLA policy, comments, history entries, and linked problem records.
+                </p>
+                <p className="text-slate-700 leading-relaxed">
+                  <strong>Decision:</strong> Use PostgreSQL with full ACID transaction boundaries. Ticket sequences remain strictly atomic under high ticket load, and milestone timestamps (first response, resolution, SLA breach flags) commit synchronously within a single transaction boundary.
                 </p>
               </div>
 
               <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h3 className="font-bold text-slate-900 text-sm">
-                  2. How does the SLA tracking engine avoid client-side clock tampering?
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-slate-900 text-sm">
+                    ADR-002: Deterministic Priority Matrix &amp; Server-Authoritative SLA Engine
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    APPROVED
+                  </span>
+                </div>
                 <p className="text-slate-700 leading-relaxed">
-                  SLA deadlines (<code className="bg-white px-1 border rounded">response_deadline</code>, <code className="bg-white px-1 border rounded">resolution_deadline</code>) are calculated strictly on the backend using authoritative UTC server time at ticket creation. A scheduled background worker (<code className="bg-white px-1 border rounded">@Scheduled</code>) evaluates open tickets, marks breaches, and flags <code className="bg-white px-1 border rounded">AT_RISK</code> status when remaining time drops below 25%. The frontend merely renders the countdown relative to server timestamps.
+                  <strong>Context:</strong> Allowing ticket requesters to self-assign severity leads to ticket inflation (everything submitted as Critical). Furthermore, client clock discrepancies or tampering could distort SLA compliance.
+                </p>
+                <p className="text-slate-700 leading-relaxed">
+                  <strong>Decision:</strong> Priority is calculated strictly through the ITIL matrix: <code className="bg-white px-1 border rounded">Priority = f(Impact, Urgency)</code>. Deadlines (<code className="bg-white px-1 border rounded">responseDeadline</code>, <code className="bg-white px-1 border rounded">resolutionDeadline</code>) are locked using authoritative UTC server time upon intake. Periodic background evaluation marks breaches independently of client interaction.
                 </p>
               </div>
 
               <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h3 className="font-bold text-slate-900 text-sm">
-                  3. How does the Priority Matrix work and why is it deterministic?
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-slate-900 text-sm">
+                    ADR-003: Concurrency Control via Entity Optimistic Locking
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    APPROVED
+                  </span>
+                </div>
                 <p className="text-slate-700 leading-relaxed">
-                  Following ITIL standards, priority is a function of <strong>Impact</strong> (number of users/services affected) multiplied by <strong>Urgency</strong> (business time criticality). For example, HIGH impact + HIGH urgency always yields P1 (Critical), while LOW + LOW yields P4. Decoupling Priority from user subjectivity prevents ticket submitters from artificially setting every issue to "Critical" without demonstrating high enterprise impact.
+                  <strong>Context:</strong> Multiple service agents or dispatchers frequently inspect and update shared ticket queues simultaneously.
+                </p>
+                <p className="text-slate-700 leading-relaxed">
+                  <strong>Decision:</strong> Entities enforce Optimistic Locking using a version field (<code className="bg-white px-1 border rounded">@Version Long version</code>). If two agents modify a ticket concurrently, the later write receives an <code className="bg-white px-1 border rounded">OptimisticLockException</code>, preventing silent overwrites and prompting the agent to refresh the current record state.
                 </p>
               </div>
 
               <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h3 className="font-bold text-slate-900 text-sm">
-                  4. What prevents two agents from overwriting each other's changes concurrently?
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-slate-900 text-sm">
+                    ADR-004: Anti-Mass-Assignment DTO Boundaries
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    APPROVED
+                  </span>
+                </div>
                 <p className="text-slate-700 leading-relaxed">
-                  In JPA/Hibernate, Optimistic Locking is implemented using a <code className="bg-white px-1 border rounded">@Version private Long version;</code> field on the <code className="bg-white px-1 border rounded">Incident</code> entity. If Agent A and Agent B load the ticket simultaneously, and Agent A commits first, Agent B's commit fails with an <code className="bg-white px-1 border rounded">OptimisticLockException</code>, preventing silent data loss and prompting Agent B to refresh and review the updated state.
+                  <strong>Context:</strong> Direct binding of request payloads to persistent entities exposes security vulnerabilities (over-posting / mass assignment of protected fields such as <code className="bg-white px-1 border rounded">role</code>, <code className="bg-white px-1 border rounded">status</code>, or SLA fields).
                 </p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-1.5">
-                <h3 className="font-bold text-slate-900 text-sm">
-                  5. Why are DTOs utilized rather than exposing JPA Entities in API controllers?
-                </h3>
                 <p className="text-slate-700 leading-relaxed">
-                  Exposing entities directly causes security vulnerabilities (over-posting / mass assignment where malicious clients pass fields like <code className="bg-white px-1 border rounded">role = ADMIN</code> or <code className="bg-white px-1 border rounded">status = CLOSED</code>), tightly couples the database schema to the public API contract, and frequently triggers Jackson <code className="bg-white px-1 border rounded">LazyInitializationException</code> or infinite circular recursion when bidirectional relationships are serialized.
+                  <strong>Decision:</strong> Distinct Request and Response DTOs enforce strict input validation (<code className="bg-white px-1 border rounded">@Valid</code>, <code className="bg-white px-1 border rounded">@NotNull</code>). Entities never cross the presentation layer directly, eliminating over-posting risks and preventing serialization circular loops.
                 </p>
               </div>
             </div>
