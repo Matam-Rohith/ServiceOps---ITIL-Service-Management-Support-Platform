@@ -32,6 +32,8 @@ import {
   INITIAL_ARTICLES,
   INITIAL_ASSETS
 } from '../data/initialData';
+import { auth, googleAuthProvider } from '../lib/firebase.ts';
+import { signInWithPopup } from 'firebase/auth';
 
 // Storage keys
 const STORAGE_PREFIX = 'serviceops_v2_';
@@ -83,6 +85,7 @@ interface ServiceOpsContextType {
   // Auth & Role
   loginAs: (user: User) => void;
   loginWithEmail: (email: string) => boolean;
+  loginWithGoogle: () => Promise<boolean>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   
@@ -309,6 +312,49 @@ export const ServiceOpsProvider: React.FC<{ children: ReactNode }> = ({ children
       return true;
     }
     return false;
+  };
+
+  const loginWithGoogle = async (): Promise<boolean> => {
+    try {
+      const result = await signInWithPopup(auth, googleAuthProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      setToken(idToken);
+
+      const loggedUser: User = {
+        id: user.uid,
+        name: user.displayName || 'Google Employee',
+        email: user.email || '',
+        role: 'EMPLOYEE',
+        department: 'Operations',
+        team: 'Service Delivery',
+        avatarUrl: user.photoURL || undefined,
+      };
+
+      setCurrentUser(loggedUser);
+
+      // Sync user to Cloud SQL database via backend API
+      try {
+        await fetch('/api/auth/sync', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            name: loggedUser.name,
+            avatarUrl: loggedUser.avatarUrl,
+          }),
+        });
+      } catch (e) {
+        console.warn('Backend Cloud SQL sync notice:', e);
+      }
+
+      return true;
+    } catch (err: any) {
+      console.error('Google Sign-In failed:', err);
+      return false;
+    }
   };
 
   const logout = () => {
@@ -972,6 +1018,7 @@ export const ServiceOpsProvider: React.FC<{ children: ReactNode }> = ({ children
         metrics,
         loginAs,
         loginWithEmail,
+        loginWithGoogle,
         logout,
         switchRole,
         createIncident,
